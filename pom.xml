@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.lancethomps</groupId>
     <artifactId>lancethomps-java-cli</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
     <relativePath />
   </parent>
   <artifactId>maven-clean-local-repo</artifactId>

@@ -2,7 +2,7 @@ package com.lancethomps.mavencleanup;
 
 import static com.lancethomps.mavencleanup.MavenCleanupUtils.fullPath;
 import static com.lancethomps.mavencleanup.MavenCleanupUtils.printerr;
-import static com.lancethomps.mavencleanup.MavenCleanupUtils.println;
+import static com.lancethomps.mavencleanup.MavenCleanupUtils.printlnWithPrefix;
 
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -41,6 +41,7 @@ public class MvnCleanLocalRepo implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
+    MavenCleanupUtils.setDebugMode(debugMode);
     if (baseDir == null) {
       baseDir = findBaseDir();
     }
@@ -48,14 +49,14 @@ public class MvnCleanLocalRepo implements Callable<Integer> {
       return 3;
     }
 
-    CacheWalker walker = new CacheWalker(verbose, debugMode);
-    println("Cleaning Maven local cache at '%s'", baseDir.getCanonicalPath());
-    int exitCode = walker.processDirectory(baseDir);
+    CacheWalker walker = new CacheWalker(verbose, debugMode, baseDir);
+    printlnWithPrefix("Cleaning Maven local cache at '%s'", fullPath(baseDir));
+    int exitCode = walker.call();
 
-    println("Total deleted %s file(s).", walker.getDeleted());
-    println("Reclaimed space %s", getHrSize(walker.getReclaimedSpace()));
+    printlnWithPrefix("Total deleted %s file(s).", walker.getDeleted());
+    printlnWithPrefix("Reclaimed space %s", getHrSize(walker.getReclaimedSpace()));
     if (walker.getFailedToDelete() > 0) {
-      println("Failed to delete %s file(s).", walker.getFailedToDelete());
+      printlnWithPrefix("Failed to delete %s file(s).", walker.getFailedToDelete());
     }
 
     return exitCode;
@@ -141,7 +142,7 @@ public class MvnCleanLocalRepo implements Callable<Integer> {
   }
 
   private boolean isValidCache(File cacheDir) {
-    return true;
+    return cacheDir.isDirectory();
   }
 
 }
