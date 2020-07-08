@@ -1,25 +1,24 @@
 language: java
 
-cache:
-  directories:
-  - $HOME/.m2
-
-before_install:
-- wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-
-matrix:
-  include:
-  # GraalVM
-  - env: JDK='GraalVM 20'
-    install: . ./install-jdk.sh --url "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-linux-amd64-20.1.0.tar.gz"
+jdk:
+- openjdk8
+- openjdk11
 
 os:
 - linux
 
 dist: xenial
 
+env:
+- GRAALVM_VERSION="20.1.0"
+
 install:
-- mvn --batch-mode --show-version clean install -P quick
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="darwin"; fi
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi
+  curl -LJ "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-java11-$DOWNLOAD_OS_NAME-amd64-$GRAALVM_VERSION.tar.gz" --output graalvm.tar.gz
+  tar -xzf graalvm.tar.gz
 
 script:
+- export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION" && if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
 - mvn --batch-mode --show-version clean verify
