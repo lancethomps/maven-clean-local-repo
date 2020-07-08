@@ -1,0 +1,25 @@
+language: java
+
+cache:
+  directories:
+  - $HOME/.m2
+
+before_install:
+- wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+
+matrix:
+  include:
+  # GraalVM
+  - env: JDK='GraalVM 20'
+    install: . ./install-jdk.sh --url "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-linux-amd64-20.1.0.tar.gz"
+
+os:
+- linux
+
+dist: xenial
+
+install:
+- mvn --batch-mode --show-version clean install -P quick
+
+script:
+- mvn --batch-mode --show-version clean verify

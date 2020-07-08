@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+################################################################### SETUP ########################################################################
+S="${BASH_SOURCE[0]}" && while [ -h "$S" ]; do D="$(cd -P "$(dirname "$S")" && pwd)" && S="$(readlink "$S")" && [[ $S != /* ]] && S="$D/$S"; done || true && _SCRIPT_DIR="$(cd -P "$(dirname "$S")" && pwd)" && unset S D
+set -o errexit -o errtrace -o nounset
+##################################################################################################################################################
+
+cd "${_SCRIPT_DIR}/../.."
+
+if test -n "${GRAAL11_HOME-}"; then
+  if test -z "${JAVA11_HOME-}" || ! [[ "${JAVA11_HOME-}" =~ .*graalvm.* ]]; then
+    echo "Changing JAVA_HOME to GRAAL_HOME: '${JAVA11_HOME-}' -> '$GRAAL11_HOME'"
+    export JAVA_HOME="$GRAAL11_HOME"
+  fi
+fi
+
+if ! test -e "${JAVA_HOME}/bin/native-image"; then
+  echo "Installing native-image binary"
+  "${JAVA_HOME}/bin/gu" install native-image
+fi
+
+mvn -f "pom.xml" clean install

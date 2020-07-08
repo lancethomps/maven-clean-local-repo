@@ -1,0 +1,13 @@
+Configuration:
+  status: warn
+  appenders:
+    Console:
+      name: STDOUT
+      PatternLayout:
+        Pattern: "%m%n"
+
+  Loggers:
+    Root:
+      level: ${sys:log4j.level:-warn}
+      AppenderRef:
+        ref: STDOUT

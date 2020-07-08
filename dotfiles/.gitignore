@@ -1,0 +1,2 @@
+.bash_completion.d/mvn_clean_local_repo-completion.sh
+bin/mvn_clean_local_repo
