@@ -18,8 +18,6 @@ cache:
 
 install:
 - scripts/travis_install.sh
-- export JAVA_HOME="$HOME/graalvm/graalvm-ce-java11-$GRAALVM_VERSION" && if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
-- mvn --batch-mode --show-version clean install -P quick
 
 script:
 - export JAVA_HOME="$HOME/graalvm/graalvm-ce-java11-$GRAALVM_VERSION" && if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
