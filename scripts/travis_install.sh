@@ -16,5 +16,5 @@ if ! test -e "$GRAALVM_DIR"; then
   tar -xzf graalvm.tar.gz
   "$HOME/graalvm/graalvm-ce-java11-$GRAALVM_VERSION/bin/gu" install native-image
 else
-  true
+  echo "graalvm already installed: $GRAALVM_DIR"
 fi
