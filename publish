@@ -188,6 +188,9 @@ function continue_because_debug() {
 
 function check_git_default_branch() {
   if git is-side-branch; then
+    if check_next_only; then
+      return 0
+    fi
     echo "Git repo not on master branch! Make a PR to master first"
     if continue_because_debug; then
       return 0
