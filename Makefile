@@ -1,3 +1,5 @@
+include Makefile.common
+
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(shell echo "$(dir $(mkfile_path))" | sed 's,/$$,,g')
 
